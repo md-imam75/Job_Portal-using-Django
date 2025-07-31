@@ -1,0 +1,22 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4">My Posted Jobs</h2>
+<div class="row">
+    {% for job in jobs %}
+        <div class="col-md-6 mb-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ job.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ job.company_name }}</h6>
+                    <a href="{% url 'applicants' job.id %}" class="btn btn-info">View Applicants</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <div class="alert alert-warning">No jobs posted yet.</div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

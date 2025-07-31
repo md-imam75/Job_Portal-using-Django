@@ -1,0 +1,23 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4">My Applications</h2>
+<div class="row">
+    {% for app in applications %}
+        <div class="col-md-6 mb-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ app.job.title }} at {{ app.job.company_name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ app.job.location }}</h6>
+                    <a href="{{ app.resume.url }}" class="btn btn-outline-primary mb-2">View Resume</a>
+                    <p class="card-text"><strong>Cover Letter:</strong> {{ app.cover_letter }}</p>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <div class="alert alert-warning">No applications submitted yet.</div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
