@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 {% block content %}
 <h2 class="mb-4">Applicants for {{ job.title }}</h2>
@@ -10,6 +9,29 @@
                     <h5 class="card-title">{{ app.applicant.username }}</h5>
                     <a href="{{ app.resume.url }}" class="btn btn-outline-primary mb-2">View Resume</a>
                     <p class="card-text"><strong>Cover Letter:</strong> {{ app.cover_letter }}</p>
+                    <p>
+                        <span class="badge 
+                            {% if app.status == 'Approved' %}bg-success
+                            {% elif app.status == 'Rejected' %}bg-danger
+                            {% else %}bg-secondary
+                            {% endif %}">
+                            {{ app.status }}
+                        </span>
+                    </p>
+                    {% if app.status == 'Pending' %}
+                        <form method="post" class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="app_id" value="{{ app.id }}">
+                            <input type="hidden" name="action" value="Approved">
+                            <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                        </form>
+                        <form method="post" class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="app_id" value="{{ app.id }}">
+                            <input type="hidden" name="action" value="Rejected">
+                            <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                        </form>
+                    {% endif %}
                 </div>
             </div>
         </div>

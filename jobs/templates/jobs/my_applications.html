@@ -2,6 +2,17 @@
 {% extends 'base.html' %}
 {% block content %}
 <h2 class="mb-4">My Applications</h2>
+<form method="get" class="mb-3">
+    <div class="input-group">
+        <select name="status" class="form-select">
+            <option value="">All Statuses</option>
+            <option value="Pending" {% if status_filter == 'Pending' %}selected{% endif %}>Pending</option>
+            <option value="Approved" {% if status_filter == 'Approved' %}selected{% endif %}>Approved</option>
+            <option value="Rejected" {% if status_filter == 'Rejected' %}selected{% endif %}>Rejected</option>
+        </select>
+        <button class="btn btn-primary" type="submit">Filter</button>
+    </div>
+</form>
 <div class="row">
     {% for app in applications %}
         <div class="col-md-6 mb-3">
@@ -11,6 +22,15 @@
                     <h6 class="card-subtitle mb-2 text-muted">{{ app.job.location }}</h6>
                     <a href="{{ app.resume.url }}" class="btn btn-outline-primary mb-2">View Resume</a>
                     <p class="card-text"><strong>Cover Letter:</strong> {{ app.cover_letter }}</p>
+                    <p>
+                        <span class="badge 
+                            {% if app.status == 'Approved' %}bg-success
+                            {% elif app.status == 'Rejected' %}bg-danger
+                            {% else %}bg-secondary
+                            {% endif %}">
+                            {{ app.status }}
+                        </span>
+                    </p>
                 </div>
             </div>
         </div>

@@ -40,6 +40,14 @@ def my_jobs(request):
 def applicants(request, job_id):
     job = get_object_or_404(Job, id=job_id, posted_by=request.user)
     applications = Application.objects.filter(job=job)
+    if request.method == 'POST':
+        app_id = request.POST.get('app_id')
+        action = request.POST.get('action')
+        application = get_object_or_404(Application, id=app_id, job=job)
+        if action in ['Approved', 'Rejected']:
+            application.status = action
+            application.save()
+        return redirect('applicants', job_id=job_id)
     return render(request, 'jobs/applicants.html', {'job': job, 'applications': applications})
 
 @login_required
@@ -59,5 +67,8 @@ def apply_job(request, job_id):
 
 @login_required
 def my_applications(request):
+    status_filter = request.GET.get('status')
     applications = Application.objects.filter(applicant=request.user)
-    return render(request, 'jobs/my_applications.html', {'applications': applications})
+    if status_filter in ['Pending', 'Approved', 'Rejected']:
+        applications = applications.filter(status=status_filter)
+    return render(request, 'jobs/my_applications.html', {'applications': applications, 'status_filter': status_filter})
